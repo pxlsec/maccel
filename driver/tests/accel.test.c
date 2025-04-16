@@ -50,6 +50,26 @@ static int test_linear_acceleration(const char *filename, fpt param_sens_mult,
   return test_acceleration(filename, args);
 }
 
+static int test_classic_acceleration(const char *filename, fpt param_sens_mult,
+                                    fpt param_yx_ratio, fpt param_accel, fpt param_power,
+                                    fpt param_offset, fpt param_output_cap) {
+  struct classic_curve_args _args =
+      (struct classic_curve_args){.accel = param_accel,
+                                  .power = param_power,
+                                 .offset = param_offset,
+                                 .output_cap = param_output_cap};
+
+  struct accel_args args = {
+      .sens_mult = param_sens_mult,
+      .yx_ratio = param_yx_ratio,
+      .input_dpi = fpt_fromint(1000),
+      .tag = classic,
+      .args = (union __accel_args){.classic = _args},
+  };
+
+  return test_acceleration(filename, args);
+}
+
 static int test_natural_acceleration(const char *filename, fpt param_sens_mult,
                                      fpt param_yx_ratio, fpt param_decay_rate,
                                      fpt param_offset, fpt param_limit) {

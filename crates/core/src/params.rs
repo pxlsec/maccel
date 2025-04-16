@@ -158,9 +158,15 @@ declare_params!(
         InputDpi
     },
     Linear {
-        Accel,
+        AccelLinear,
         OffsetLinear,
-        OutputCap,
+        OutputCapLinear,
+    },
+    Classic {
+        AccelClassic,
+        PowerClassic,
+        OffsetClassic,
+        OutputCapClassic,
     },
     Natural {
         DecayRate,
@@ -179,6 +185,7 @@ impl AccelMode {
     pub fn as_title(&self) -> &'static str {
         match self {
             AccelMode::Linear => "Linear Acceleration",
+            AccelMode::Classic => "Classic Acceleration",
             AccelMode::Natural => "Natural (w/ Gain)",
             AccelMode::Synchronous => "Synchronous",
         }
@@ -272,14 +279,30 @@ pub mod persist {
 
         pub fn set_all_linear(&mut self, args: LinearParamArgs) -> anyhow::Result<()> {
             let LinearParamArgs {
-                accel,
+                accel_linear,
                 offset_linear,
-                output_cap,
+                output_cap_linear,
             } = args;
 
-            self.set(Param::Accel, accel)?;
+            self.set(Param::AccelLinear, accel_linear)?;
             self.set(Param::OffsetLinear, offset_linear)?;
-            self.set(Param::OutputCap, output_cap)?;
+            self.set(Param::OutputCapLinear, output_cap_linear)?;
+
+            Ok(())
+        }
+        
+        pub fn set_all_classic(&mut self, args: ClassicParamArgs) -> anyhow::Result<()> {
+            let ClassicParamArgs {
+                accel_classic,
+                power_classic,
+                offset_classic,
+                output_cap_classic,
+            } = args;
+
+            self.set(Param::AccelClassic, accel_classic)?;
+            self.set(Param::PowerClassic, power_classic)?;
+            self.set(Param::OffsetLinear, offset_classic)?;
+            self.set(Param::OutputCapLinear, output_cap_classic)?;
 
             Ok(())
         }
@@ -385,10 +408,14 @@ impl Param {
             Param::SensMult => "SENS_MULT",
             Param::YxRatio => "YX_RATIO",
             Param::InputDpi => "INPUT_DPI",
-            Param::Accel => "ACCEL",
+            Param::AccelLinear => "ACCEL",
+            Param::AccelClassic => "ACCEL",
+            Param::PowerClassic => "POWER",
             Param::OffsetLinear => "OFFSET",
+            Param::OffsetClassic => "OFFSET",
             Param::OffsetNatural => "OFFSET",
-            Param::OutputCap => "OUTPUT_CAP",
+            Param::OutputCapLinear => "OUTPUT_CAP",
+            Param::OutputCapClassic => "OUTPUT_CAP",
             Param::DecayRate => "DECAY_RATE",
             Param::Limit => "LIMIT",
             Param::Gamma => "GAMMA",
@@ -401,11 +428,15 @@ impl Param {
     pub fn display_name(&self) -> &'static str {
         match self {
             Param::SensMult => "Sens-Multiplier",
-            Param::Accel => "Accel",
+            Param::AccelLinear => "Accel",
+            Param::AccelClassic => "Accel",
+            Param::PowerClassic => "Power",
             Param::InputDpi => "Input DPI",
             Param::OffsetLinear => "Offset",
             Param::OffsetNatural => "Offset",
-            Param::OutputCap => "Output-Cap",
+            Param::OffsetClassic => "Offset",
+            Param::OutputCapLinear => "Output-Cap",
+            Param::OutputCapClassic => "Output-Cap",
             Param::YxRatio => "Y/x Ratio",
             Param::DecayRate => "Decay-Rate",
             Param::Limit => "Limit",
@@ -456,13 +487,16 @@ mod validate {
                     anyhow::bail!("Input DPI must be positive");
                 }
             }
-            Param::Accel => {}
-            Param::OutputCap => {}
-            Param::OffsetLinear | Param::OffsetNatural => {
+            Param::AccelLinear => {}
+            Param::OutputCapLinear => {}
+            Param::OffsetLinear | Param::OffsetClassic | Param::OffsetNatural => {
                 if value < 0.0 {
                     anyhow::bail!("offset cannot be less than 0");
                 }
             }
+            Param::AccelClassic => {}
+            Param::PowerClassic => {}
+            Param::OutputCapClassic => {}
             Param::DecayRate => {
                 if value <= 0.0 {
                     anyhow::bail!("decay rate must be positive");
