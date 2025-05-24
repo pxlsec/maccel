@@ -10,9 +10,9 @@ impl AllParamArgs {
     fn convert_to_accel_args(&self, mode: AccelMode) -> AccelParams {
         let params_by_mode = match mode {
             AccelMode::Linear => AccelParamsByMode::Linear(LinearCurveParams {
-                accel: self.accel,
+                accel_linear: self.accel_linear,
                 offset_linear: self.offset_linear,
-                output_cap: self.output_cap,
+                output_cap_linear: self.output_cap_linear,
             }),
             AccelMode::Natural => AccelParamsByMode::Natural(NaturalCurveParams {
                 decay_rate: self.decay_rate,

@@ -58,7 +58,7 @@ impl App {
                         SensitivityGraph::new(context.clone()).on_y_axix_bounds_update(|ctx| {
                             // Appropriate dynamic bounds for the Linear sens graph
                             let upper_bound = f64::from(get_param_value_from_ctx!(ctx, SensMult))
-                                * f64::from(get_param_value_from_ctx!(ctx, OutputCap)).max(1.0)
+                                * f64::from(get_param_value_from_ctx!(ctx, OutputCapLinear)).max(1.0)
                                 * 2.0;
 
                             [0.0, upper_bound]
