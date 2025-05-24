@@ -32,6 +32,13 @@ static struct accel_args collect_args(void) {
     accel.args.natural.limit = atofp(PARAM_LIMIT);
     break;
   }
+    case classic: {
+    accel.args.classic.accel = atofp(PARAM_ACCEL);
+    accel.args.classic.power = atofp(PARAM_POWER);
+    accel.args.classic.offset = atofp(PARAM_OFFSET);
+    accel.args.classic.output_cap = atofp(PARAM_OUTPUT_CAP);
+    break;
+  }
   case linear:
   default: {
     accel.args.linear.accel = atofp(PARAM_ACCEL);

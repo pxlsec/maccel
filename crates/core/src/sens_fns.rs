@@ -1,7 +1,7 @@
 use crate::{
     libmaccel::{self, fixedptc::Fpt},
     params::AllParamArgs,
-    AccelParams, AccelParamsByMode, LinearCurveParams, NaturalCurveParams, SynchronousCurveParams,
+    AccelParams, AccelParamsByMode, ClassicCurveParams, LinearCurveParams, NaturalCurveParams, SynchronousCurveParams
 };
 
 use crate::AccelMode;
@@ -13,6 +13,12 @@ impl AllParamArgs {
                 accel_linear: self.accel_linear,
                 offset_linear: self.offset_linear,
                 output_cap_linear: self.output_cap_linear,
+            }),
+            AccelMode::Classic => AccelParamsByMode::Classic(ClassicCurveParams{
+                accel_classic: self.accel_classic,
+                power_classic: self.power_classic,
+                offset_classic: self.offset_classic,
+                output_cap_classic: self.output_cap_classic,
             }),
             AccelMode::Natural => AccelParamsByMode::Natural(NaturalCurveParams {
                 decay_rate: self.decay_rate,

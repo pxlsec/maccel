@@ -37,6 +37,13 @@ PARAM(ACCEL, 0, "Control the sensitivity calculation.");
 PARAM(OFFSET, 0, "Control the input speed past which to allow acceleration.");
 PARAM(OUTPUT_CAP, 0, "Control the maximum sensitivity.");
 
+#if FIXEDPT_BITS == 64
+PARAM(POWER, 8589934592, // 2 << 32
+      "Control the power factor for the 'classic' curve");
+#else
+PARAM(POWER, 131072, // 2 << 16
+      "Control the power factor for the 'classic' curve");
+#endif
 // For Natural Mode
 
 #if FIXEDPT_BITS == 64

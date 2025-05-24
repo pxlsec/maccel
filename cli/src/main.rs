@@ -4,7 +4,7 @@ use maccel_core::{
     fixedptc::Fpt,
     persist::{ParamStore, SysFsStore},
     subcommads::*,
-    AccelMode, Param, ALL_COMMON_PARAMS, ALL_LINEAR_PARAMS, ALL_NATURAL_PARAMS,
+    AccelMode, Param, ALL_COMMON_PARAMS, ALL_LINEAR_PARAMS, ALL_CLASSIC_PARAMS, ALL_NATURAL_PARAMS,
     ALL_SYNCHRONOUS_PARAMS,
 };
 use maccel_tui::run_tui;
@@ -69,6 +69,9 @@ fn main() -> anyhow::Result<()> {
                 SetParamByModesSubcommands::Linear(param_args) => {
                     param_store.set_all_linear(param_args)?
                 }
+                SetParamByModesSubcommands::Classic(param_args) => {
+                    param_store.set_all_classic(param_args)?
+                }
                 SetParamByModesSubcommands::Natural(param_args) => {
                     param_store.set_all_natural(param_args)?
                 }
@@ -95,6 +98,9 @@ fn main() -> anyhow::Result<()> {
                 GetParamsByModesSubcommands::Linear => {
                     print_all_params(ALL_LINEAR_PARAMS.iter(), oneline, quiet)?;
                 }
+                GetParamsByModesSubcommands::Classic => {
+                    print_all_params(ALL_CLASSIC_PARAMS.iter(), oneline, quiet)?;
+                }
                 GetParamsByModesSubcommands::Natural => {
                     print_all_params(ALL_NATURAL_PARAMS.iter(), oneline, quiet)?;
                 }
@@ -111,6 +117,9 @@ fn main() -> anyhow::Result<()> {
                 match mode {
                     AccelMode::Linear => {
                         print_all_params(ALL_LINEAR_PARAMS.iter(), false, false)?;
+                    }
+                    AccelMode::Classic => {
+                        print_all_params(ALL_CLASSIC_PARAMS.iter(), false, false)?;
                     }
                     AccelMode::Natural => {
                         print_all_params(ALL_NATURAL_PARAMS.iter(), false, false)?;
